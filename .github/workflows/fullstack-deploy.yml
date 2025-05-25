@@ -59,4 +59,4 @@ jobs:
       run: npm run build
 
     - name: Finish
-      run: echo "Deployment complete for stage: ${{ github.event.inputs.stage }}"
+      run: echo "Deployment complete for stage ${{ github.event.inputs.stage }}"
