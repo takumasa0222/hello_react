@@ -37,6 +37,11 @@ jobs:
         role-session-name: GitHubActions
         aws-region: ap-northeast-1
 
+    - name: Bootstrap CDK environment
+      run: |
+        cd cdk
+        npx cdk bootstrap aws://631283698624/ap-northeast-1 --context stage=${{ github.event.inputs.stage }}
+
     - name: Deploy infrastructure via CDK
       run: |
         cd cdk
