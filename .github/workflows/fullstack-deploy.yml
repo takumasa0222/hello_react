@@ -39,7 +39,7 @@ jobs:
 
     - name: Deploy infrastructure via CDK
       run: |
-        ls
+        cd cdk
         npx cdk deploy --all --require-approval never --context stage=${{ github.event.inputs.stage }}
 
     - name: Get API URL from CDK Output
@@ -53,7 +53,7 @@ jobs:
       run: echo "REACT_APP_API_URL=${{ env.API_URL }}" > .env.production
 
     - name: Build backend
-      run: cd ../backend && npm run build
+      run: cd backend && npm run build
 
     - name: Build frontend (React)
       working-directory: frontend
