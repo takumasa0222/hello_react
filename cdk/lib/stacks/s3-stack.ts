@@ -16,7 +16,7 @@ export class S3Stack extends Construct {
 			bucketName,
 
 			removalPolicy: props.stage === 'prod' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
-			autoDeleteObjects: S3_CONST.AUTO_DELETE_OBJ
+			autoDeleteObjects: props.stage === 'prod' ? false : true,
 		});
 	}
 }
