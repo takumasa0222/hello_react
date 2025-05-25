@@ -5,12 +5,13 @@ export default function Greetings() {
 	const [message, setMessage] = useState<string | null>(null);
 	// const [error, setError] = useState<any>(null);
 	const id = 0;
+	const apiUrl = process.env.REACT_APP_API_URL;
 
 	useEffect(() => {
 		if (id == null) return;
 	const fetchData = async () => {
 		try {
-			const res = await axios.get(`https://2q5iffjd6g.execute-api.ap-northeast-1.amazonaws.com/retrieveHelloDataFromDynamo?id=${id}`);
+			const res = await axios.get(`${apiUrl}/message?id=${id}`);
 			setMessage(res.data);
 		} catch (err) {
 			console.error(err);

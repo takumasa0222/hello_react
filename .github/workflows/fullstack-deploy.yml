@@ -44,17 +44,17 @@ jobs:
     - name: Get API URL from CDK Output
       id: get_output
       run: |
-        URL=$(npx cdk --context stage=${{ github.event.inputs.stage }} output ApiUrl-${{ github.event.inputs.stage }} | tail -n 1)
+        URL=$(npx cdk --context stage=${{ github.event.inputs.stage }} output ApiUrl-${{ github.event.inputs.stage }} | awk '{print $NF})
         echo "API_URL=${URL}" >> $GITHUB_ENV
 
     - name: Create React .env.production with API URL
       working-directory: frontend
       run: echo "REACT_APP_API_URL=${{ env.API_URL }}" > .env.production
 
-    - name: 🛠 Build backend
+    - name: Build backend
       run: cd backend && npm run build
 
-    - name: 🛠 Build frontend (React)
+    - name: Build frontend (React)
       working-directory: frontend
       run: npm run build
 

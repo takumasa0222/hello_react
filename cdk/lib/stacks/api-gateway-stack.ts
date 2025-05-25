@@ -28,8 +28,8 @@ export class ApiGatewayStack extends Construct {
 			integration: new integrations.HttpLambdaIntegration('LambdaIntegration', props.lambdaFunction),
 		});
 		new cdk.CfnOutput(this, 'ApiUrl', {
-			value: this.httpApi.url ?? 'MISSING',
-			exportName: 'ApiUrl',
-		});
+			value: `${this.httpApi.url}${API_GATEWAY.PATH}`,
+			exportName: `ApiUrl-${props.stage}`,
+		  });
 	}
 }
