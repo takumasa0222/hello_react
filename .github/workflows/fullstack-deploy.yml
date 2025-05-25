@@ -45,14 +45,14 @@ jobs:
     - name: Deploy infrastructure via CDK
       run: |
         cd cdk
-        npx cdk deploy --all --require-approval never --context stage=${{ github.event.inputs.stage }}
+        npx cdk deploy --all --require-approval never --context stage=${{ github.event.inputs.stage }} --outputs-file ../cdk-outputs.json
 
     - name: Get API URL from CDK Output
       id: get_output
       run: |
-        URL=$(npx cdk --context stage=${{ github.event.inputs.stage }} output ApiUrl-${{ github.event.inputs.stage }} | awk '{print $NF}')
-        echo "API_URL=${URL}" >> $GITHUB_ENV
-        echo $GITHUB_ENV | grep API_URL
+        API_URL=$(jq -r '.["AppStack-${{ github.event.inputs.stage }}"].ApiUrl' ../cdk-outputs.json)
+        echo "API_URL=$API_URL" >> $GITHUB_ENV
+        echo "API_URL=$API_URL"
 
     - name: Create React .env.production with API URL
       working-directory: frontend
