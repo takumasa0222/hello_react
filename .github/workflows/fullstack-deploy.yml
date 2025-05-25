@@ -50,7 +50,7 @@ jobs:
     - name: Get API URL from CDK Output
       id: get_output
       run: |
-        API_URL=$(jq -r '.["AppStack-${{ github.event.inputs.stage }}"].ApiUrl' ../cdk-outputs.json)
+        API_URL=$(jq -r '.["AppStack-${{ github.event.inputs.stage }}"].ApiUrl' cdk-outputs.json)
         echo "API_URL=$API_URL" >> $GITHUB_ENV
         echo "API_URL=$API_URL"
 
