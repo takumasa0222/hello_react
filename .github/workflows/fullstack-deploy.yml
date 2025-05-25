@@ -52,6 +52,7 @@ jobs:
       run: |
         URL=$(npx cdk --context stage=${{ github.event.inputs.stage }} output ApiUrl-${{ github.event.inputs.stage }} | awk '{print $NF}')
         echo "API_URL=${URL}" >> $GITHUB_ENV
+        echo $GITHUB_ENV | grep API_URL
 
     - name: Create React .env.production with API URL
       working-directory: frontend
