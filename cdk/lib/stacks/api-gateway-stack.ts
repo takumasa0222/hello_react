@@ -4,6 +4,7 @@ import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { StageStackProps } from "../types/stack-props";
 import { API_GATEWAY } from "../constants/api-gateway.constants";
+import * as cdk from 'aws-cdk-lib';
 import { createResourceName } from "../utils/naming";
 
 interface ApiGatwayStackProps extends StageStackProps {
@@ -24,7 +25,11 @@ export class ApiGatewayStack extends Construct {
 		this.httpApi.addRoutes({
 			path: API_GATEWAY.PATH,
 			methods: [apigwv2.HttpMethod.GET],
-			integration: new integrations.HttpLambdaIntegration('LambdaIntegration', props.lambdaFunction)
+			integration: new integrations.HttpLambdaIntegration('LambdaIntegration', props.lambdaFunction),
+		});
+		new cdk.CfnOutput(this, 'ApiUrl', {
+			value: this.httpApi.url ?? 'MISSING',
+			exportName: 'ApiUrl',
 		});
 	}
 }

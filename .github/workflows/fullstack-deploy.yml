@@ -1,0 +1,62 @@
+name: Deploy CDK + React (dev/prod)
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'Environment stage'
+        required: true
+        default: 'prod'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'
+
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd frontend && npm ci
+        cd ../backend && npm ci
+
+    - name: Assume Role with OIDC
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::631283698624:role/github-oidc-react-role
+        role-session-name: GitHubActions
+        aws-region: ap-northeast-1
+
+    - name: Deploy infrastructure via CDK
+      run: |
+        npx cdk deploy --all --require-approval never --context stage=${{ github.event.inputs.stage }}
+
+    - name: Get API URL from CDK Output
+      id: get_output
+      run: |
+        URL=$(npx cdk --context stage=${{ github.event.inputs.stage }} output ApiUrl-${{ github.event.inputs.stage }} | tail -n 1)
+        echo "API_URL=${URL}" >> $GITHUB_ENV
+
+    - name: Create React .env.production with API URL
+      working-directory: frontend
+      run: echo "REACT_APP_API_URL=${{ env.API_URL }}" > .env.production
+
+    - name: 🛠 Build backend
+      run: cd backend && npm run build
+
+    - name: 🛠 Build frontend (React)
+      working-directory: frontend
+      run: npm run build
+
+    - name: Finish
+      run: echo "Deployment complete for stage: ${{ github.event.inputs.stage }}"

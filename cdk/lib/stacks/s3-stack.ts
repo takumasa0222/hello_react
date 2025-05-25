@@ -14,11 +14,9 @@ export class S3Stack extends Construct {
 		const bucketName = createResourceName(S3_CONST.BASE_NAME, props.stage).toLocaleLowerCase();
 		this.bucket = new s3.Bucket(this, 'Bucket', {
 			bucketName,
-			websiteIndexDocument: S3_CONST.INDEX_DOCUMENT,
-			websiteErrorDocument: S3_CONST.ERROR_DOCUMENT,
-			publicReadAccess: true,
+
 			removalPolicy: props.stage === 'prod' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
-			autoDeleteObjects: true
+			autoDeleteObjects: S3_CONST.AUTO_DELETE_OBJ
 		});
 	}
 }
