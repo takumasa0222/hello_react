@@ -4,7 +4,7 @@
 	"type": "module",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "tsc"
+		"build": "tsc && copy package.json dist"
 	},
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "^3.500.0",
