@@ -20,7 +20,7 @@ export default function Greetings() {
 	};
 
 	fetchData();
-	}, []);
+	}, [apiUrl]);
 	return (
 	<div>
 		{/* {error && <p style={{ color: 'red' }}>Error: {error.message}</p>} */}
