@@ -11,7 +11,7 @@ export default function Greetings() {
 		if (id == null) return;
 	const fetchData = async () => {
 		try {
-			const res = await axios.get(`${apiUrl}?id=${id}`);
+			const res = await axios.get(`${apiUrl}?lang=ja&type=default`);
 			setMessage(res.data);
 		} catch (err) {
 			console.error(err);
