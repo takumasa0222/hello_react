@@ -12,5 +12,5 @@ export const SEED_LAMBDA = {
 	HANDLER: 'index.handler',
 	TIMEOUT_SECONDS: 5,
 	MEMORY_MB: 128,
-	CODE_ASSET_PATH:'../seed'
+	CODE_ASSET_PATH:'./lib/seed'
 };
