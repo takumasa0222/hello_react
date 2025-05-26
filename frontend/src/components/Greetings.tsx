@@ -12,7 +12,7 @@ export default function Greetings() {
 	const fetchData = async () => {
 		try {
 			const res = await axios.get(`${apiUrl}?lang=ja&type=default`);
-			setMessage(res.data);
+			setMessage(res.data.message);
 		} catch (err) {
 			console.error(err);
 			// setError(err);
