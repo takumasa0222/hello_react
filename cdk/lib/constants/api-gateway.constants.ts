@@ -4,13 +4,6 @@ export const API_GATEWAY = {
 	PATH: 'message',
 	METHOD: 'GET',
 	CORS_ORIGINS: ['*'],
-	CORS_METHODS: ['GET'],
-	CORS_HEADERS: [
-		'Content-Type',
-		'Authorization',
-		'X-Amz-Date',
-		'X-Api-Key',
-		'X-Amz-Security-Token',
-		'X-Amz-User-Agent',
-	],
+	CORS_METHODS: ['GET','OPTIONS'],
+	CORS_HEADERS: ['*'],
 }

@@ -19,10 +19,10 @@ export class ApiGatewayStack extends Construct {
 		this.restApi = new apigw.RestApi(this, 'RestApi', {
 			restApiName: apiGatewayName,
 			description: API_GATEWAY.DESCRIPTION,
-			defaultCorsPreflightOptions: {
-			  allowOrigins: apigw.Cors.ALL_ORIGINS,
-			  allowMethods: apigw.Cors.ALL_METHODS,
-			},
+			// defaultCorsPreflightOptions: {
+			//   allowOrigins: apigw.Cors.ALL_ORIGINS,
+			//   allowMethods: apigw.Cors.ALL_METHODS,
+			// },
 		});
 		const message = this.restApi.root.addResource(API_GATEWAY.PATH);
 		if (!message.node.tryFindChild('OPTIONS')) {
@@ -30,7 +30,7 @@ export class ApiGatewayStack extends Construct {
 			  allowOrigins: API_GATEWAY.CORS_ORIGINS,
 			  allowMethods: API_GATEWAY.CORS_METHODS,
 			  allowHeaders: API_GATEWAY.CORS_HEADERS,
-			  allowCredentials: true,
+			  allowCredentials: false,
 			});
 		}
 		message.addMethod(
