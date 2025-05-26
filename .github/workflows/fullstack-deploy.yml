@@ -30,6 +30,9 @@ jobs:
         cd ../frontend && npm ci
         cd ../backend && npm ci
 
+    - name: Build backend
+      run: cd backend && npm run build
+
     - name: Assume Role with OIDC
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -54,13 +57,11 @@ jobs:
         API_URL=$(jq -r --arg key "$STACK_NAME" '.[$key].ApiUrl' cdk-outputs.json)
         echo "REACT_APP_API_URL=$API_URL" >> frontend/.env.production
         echo "API_URL=$API_URL" >> $GITHUB_ENV
-        
+
     - name: Create React .env.production with API URL
       working-directory: frontend
       run: echo "REACT_APP_API_URL=${{ env.API_URL }}" > .env.production
 
-    - name: Build backend
-      run: cd backend && npm run build
 
     - name: Build frontend (React)
       working-directory: frontend
