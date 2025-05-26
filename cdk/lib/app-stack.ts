@@ -25,9 +25,13 @@ export class AppStack extends cdk.Stack {
 			exportName: `ApiUrl-${props.stage}`,
 		  });
 		const s3 = new S3Stack(this, `S3-${props.stage}`, props);
-		 new CloudFrontStack(this, `cloudfront-${props.stage}`, {
+		new CloudFrontStack(this, `cloudfront-${props.stage}`, {
 			...props,
 			bucket: s3.bucket
+		});
+		new cdk.CfnOutput(this, 'FrontendBucketName', {
+			value:s3.bucket.bucketName,
+			exportName: `s3-${props.stage}`,
 		});
 	}
 }

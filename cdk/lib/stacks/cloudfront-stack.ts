@@ -30,17 +30,17 @@ export class CloudFrontStack extends Construct {
 			value: `https://${this.distribution.distributionDomainName}`,
 		});
 
-		new s3_deployment.BucketDeployment(this, 'WebsiteDeploy', {
-			sources: [
-			  s3_deployment.Source.data(
-				'/index.html',
-				'<html><body><h1>Hello, CDK!</h1></body></html>'
-			  ),
-			  s3_deployment.Source.data('/favicon.ico', ''),
-			],
-			destinationBucket: props.bucket,
-			distribution: this.distribution,
-			distributionPaths: ['/*'],
-		  });
+		// new s3_deployment.BucketDeployment(this, 'WebsiteDeploy', {
+		// 	sources: [
+		// 	  s3_deployment.Source.data(
+		// 		'/index.html',
+		// 		'<html><body><h1>Hello, CDK!</h1></body></html>'
+		// 	  ),
+		// 	  s3_deployment.Source.data('/favicon.ico', ''),
+		// 	],
+		// 	destinationBucket: props.bucket,
+		// 	distribution: this.distribution,
+		// 	distributionPaths: ['/*'],
+		//   });
 	}
 }
