@@ -73,6 +73,7 @@ jobs:
       run: |
         BUCKET_NAME=$(jq -r --arg key "$STACK_NAME" '.[$key].FrontendBucketName' cdk-outputs.json)
         echo "BUCKET_NAME=$BUCKET_NAME" >> $GITHUB_ENV
+        cat cdk-outputs.json
 
     - name: Upload React build to S3
       run: |

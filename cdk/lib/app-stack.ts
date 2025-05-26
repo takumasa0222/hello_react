@@ -31,7 +31,6 @@ export class AppStack extends cdk.Stack {
 		});
 		new cdk.CfnOutput(this, 'FrontendBucketName', {
 			value:s3.bucket.bucketName,
-			exportName: `s3-${props.stage}`,
 		});
 	}
 }
