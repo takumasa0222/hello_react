@@ -50,14 +50,11 @@ jobs:
     - name: Get API URL from CDK Output
       id: get_output
       run: |
-        echo "cdk-outputs.json content:"
-        cat cdk-outputs.json
         STACK_NAME=$(jq -r 'keys[0]' cdk-outputs.json)
         API_URL=$(jq -r --arg key "$STACK_NAME" '.[$key].ApiUrl' cdk-outputs.json)
         echo "REACT_APP_API_URL=$API_URL" >> frontend/.env.production
         echo "API_URL=$API_URL" >> $GITHUB_ENV
-
-
+        
     - name: Create React .env.production with API URL
       working-directory: frontend
       run: echo "REACT_APP_API_URL=${{ env.API_URL }}" > .env.production
