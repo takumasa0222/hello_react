@@ -25,17 +25,17 @@ export class ApiGatewayStack extends Construct {
 			},
 		});
 		const message = this.restApi.root.addResource(API_GATEWAY.PATH);
+		message.addCorsPreflight({
+			allowOrigins: API_GATEWAY.CORS_ORIGINS,
+			allowMethods: API_GATEWAY.CORS_METHODS,
+			allowHeaders: API_GATEWAY.CORS_HEADERS,
+			allowCredentials: true,
+		})
 		message.addMethod(
 			API_GATEWAY.METHOD,
 			new apigw.LambdaIntegration(props.lambdaFunction, {
 			  proxy: true,
 			})
 		);
-		// this.restApi.root.addCorsPreflight({
-		// 	allowOrigins: API_GATEWAY.CORS_ORIGINS,
-		// 	allowMethods: API_GATEWAY.CORS_METHODS,
-		// 	allowHeaders: API_GATEWAY.CORS_HEADERS,
-		// 	allowCredentials: true,
-		// })
 	}
 }
