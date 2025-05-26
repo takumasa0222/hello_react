@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { StageStackProps } from './types/stack-props';
 import { DynamoDBStack } from './stacks/dynamodb-stack';
 import { LambdaStack } from './stacks/lambda-stack';
+import { SeedLambdaStack } from './stacks/seed-lambda-stack';
 import { ApiGatewayStack } from './stacks/api-gateway-stack'; 
 import { S3Stack } from './stacks/s3-stack';
 import { CloudFrontStack } from './stacks/cloudfront-stack'; 
@@ -20,6 +21,10 @@ export class AppStack extends cdk.Stack {
 			...props,
 			lambdaFunction: lambda.fn
 		});
+		new SeedLambdaStack(this, 'SeedLambdaStack', {
+			...props,
+			table: dynamo.table,
+		  });
 		new cdk.CfnOutput(this, 'ApiUrl', {
 			value: `https://${apigw.httpApi.apiId}.execute-api.${cdk.Stack.of(this).region}.amazonaws.com${API_GATEWAY.PATH}`,
 			exportName: `ApiUrl-${props.stage}`,

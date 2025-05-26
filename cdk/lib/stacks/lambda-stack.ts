@@ -8,8 +8,7 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 interface LambdaStackProps extends StageStackProps {
 	table: dynamodb.Table;
-  }
-
+}
 
 export class LambdaStack extends Construct {
 	public readonly fn: lambda.Function;

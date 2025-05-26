@@ -7,7 +7,7 @@ const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const TABLE_NAME = process.env.TABLE_NAME!;
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const id = event.queryStringParameters?.id ?? '0';
+  const id = event.queryStringParameters?.lang ?? '0';
 
   try {
     const result = await client.send(new GetCommand({
