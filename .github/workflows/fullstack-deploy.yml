@@ -71,6 +71,8 @@ jobs:
 
     - name: Get S3 bucket name
       run: |
+        STACK_NAME=$(jq -r 'keys[0]' cdk-outputs.json)
+        echo "Detected STACK_NAME: $STACK_NAME"
         BUCKET_NAME=$(jq -r --arg key "$STACK_NAME" '.[$key].FrontendBucketName' cdk-outputs.json)
         echo "BUCKET_NAME=$BUCKET_NAME" >> $GITHUB_ENV
         cat cdk-outputs.json
