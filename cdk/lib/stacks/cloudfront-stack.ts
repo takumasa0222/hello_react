@@ -8,6 +8,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3'
 
 interface CloudFrontStackProps extends StageStackProps {
 	bucket: s3.Bucket;
+	apiDomainName: string;
 }
 
 export class CloudFrontStack extends Construct {
@@ -22,6 +23,17 @@ export class CloudFrontStack extends Construct {
 			defaultBehavior: {
 				origin: origins.S3BucketOrigin.withOriginAccessControl(props.bucket),
 				viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+			},
+			additionalBehaviors: {
+				"api/*": {
+					origin: new origins.HttpOrigin(props.apiDomainName, {
+						originPath: '/', 
+					}),
+					allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+					cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+					originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER
+				}
 			}
 		});
 		
