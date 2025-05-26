@@ -31,12 +31,11 @@ export class ApiGatewayStack extends Construct {
 			  proxy: true,
 			})
 		);
-		this.restApi.root.addCorsPreflight({
-			allowOrigins: API_GATEWAY.CORS_ORIGINS,
-			allowMethods: API_GATEWAY.CORS_METHODS,
-			allowHeaders: API_GATEWAY.CORS_HEADERS,
-			allowCredentials: true,
-		})
-
+		// this.restApi.root.addCorsPreflight({
+		// 	allowOrigins: API_GATEWAY.CORS_ORIGINS,
+		// 	allowMethods: API_GATEWAY.CORS_METHODS,
+		// 	allowHeaders: API_GATEWAY.CORS_HEADERS,
+		// 	allowCredentials: true,
+		// })
 	}
 }
