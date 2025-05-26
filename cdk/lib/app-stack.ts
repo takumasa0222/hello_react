@@ -22,7 +22,7 @@ export class AppStack extends cdk.Stack {
 		});
 
 		new cdk.CfnOutput(this, 'ApiUrl', {
-			value: `https://${apigw.httpApi.apiId}.execute-api.${cdk.Stack.of(this).region}.amazonaws.com${API_GATEWAY.PATH}`,
+			value: `https://${apigw.restApi.restApiId}.execute-api.${cdk.Stack.of(this).region}.amazonaws.com${API_GATEWAY.PATH}`,
 			exportName: `ApiUrl-${props.stage}`,
 		  });
 		const s3 = new S3Stack(this, `S3-${props.stage}`, props);
