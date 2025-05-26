@@ -41,7 +41,7 @@ export class ApiGatewayStack extends Construct {
 			{
 				apiKeyRequired: false,
 				authorizationType: apigw.AuthorizationType.NONE,
-			  }
+			}
 		);
 	}
 }
