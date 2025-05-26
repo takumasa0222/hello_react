@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
-import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
-import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { StageStackProps } from "../types/stack-props";
 import { API_GATEWAY } from "../constants/api-gateway.constants";
@@ -11,21 +10,33 @@ interface ApiGatwayStackProps extends StageStackProps {
 }
 
 export class ApiGatewayStack extends Construct {
-	public readonly httpApi: apigwv2.HttpApi;
+	public readonly restApi: apigw.RestApi;
 
 	constructor (scope: Construct, id: string, props: ApiGatwayStackProps) {
 		super(scope, id);
 
 		const apiGatewayName = createResourceName(API_GATEWAY.BASE_NAME, props.stage);
-		this.httpApi = new apigwv2.HttpApi(this, 'HttpApi', {
-			apiName: apiGatewayName,
+		this.restApi = new apigw.RestApi(this, 'RestApi', {
+			restApiName: apiGatewayName,
 			description: API_GATEWAY.DESCRIPTION,
+			defaultCorsPreflightOptions: {
+			  allowOrigins: apigw.Cors.ALL_ORIGINS,
+			  allowMethods: apigw.Cors.ALL_METHODS,
+			},
 		});
-		this.httpApi.addRoutes({
-			path: API_GATEWAY.PATH,
-			methods: [apigwv2.HttpMethod.GET],
-			integration: new integrations.HttpLambdaIntegration('LambdaIntegration', props.lambdaFunction),
-		});
+		const message = this.restApi.root.addResource(API_GATEWAY.PATH);
+		message.addMethod(
+			API_GATEWAY.METHOD,
+			new apigw.LambdaIntegration(props.lambdaFunction, {
+			  proxy: true,
+			})
+		);
+		this.restApi.root.addCorsPreflight({
+			allowOrigins: API_GATEWAY.CORS_ORIGINS,
+			allowMethods: API_GATEWAY.CORS_METHODS,
+			allowHeaders: API_GATEWAY.CORS_HEADERS,
+			allowCredentials: true,
+		})
 
 	}
 }

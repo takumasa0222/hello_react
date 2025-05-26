@@ -7,39 +7,45 @@ const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const TABLE_NAME = process.env.TABLE_NAME!;
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const id = event.queryStringParameters?.lang ?? '0';
-
-  try {
-    const result = await client.send(new GetCommand({
-      TableName: TABLE_NAME,
-      Key: { id: Number(id) },
-    }));
-
-    if (!result.Item) {
-      return {
-        statusCode: 404,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({ error: 'Item not found' }),
-      };
-    }
-
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify(result.Item),
-    };
-  } catch (error) {
-    console.error('Error fetching from DynamoDB:', error);
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({ error: 'Internal server error' }),
-    };
-  }
+	const query = event.queryStringParameters || {}
+	const lang = query.lang;
+	const type = query.type;
+	
+	if (!lang || !type) {
+		return {
+		statusCode: 400,
+		headers: { 'Access-Control-Allow-Origin': '*' },
+		body: JSON.stringify({ error: 'Missing lang or type query parameter' }),
+		};
+	}
+	try {
+		const result = await client.send(
+			new GetCommand({
+				TableName: TABLE_NAME,
+				Key: {
+					lang: lang,
+					type: type,
+				},
+			})
+		);
+		if (!result.Item) {
+			return {
+				statusCode: 404,
+				headers: { 'Access-Control-Allow-Origin': '*' },
+				body: JSON.stringify({ error: 'Item not found' }),
+			};
+		}
+		return {
+			statusCode: 200,
+			headers: { 'Access-Control-Allow-Origin': '*' },
+			body: JSON.stringify(result.Item),
+		};
+	} catch (error) {
+		console.error('DynamoDB error:', error);
+		return {
+		statusCode: 500,
+		headers: { 'Access-Control-Allow-Origin': '*' },
+		body: JSON.stringify({ error: 'Internal server error' }),
+		};
+	}
 };
