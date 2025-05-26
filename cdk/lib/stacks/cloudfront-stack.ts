@@ -28,6 +28,7 @@ export class CloudFrontStack extends Construct {
 				"api/*": {
 					origin: new origins.HttpOrigin(props.apiDomainName, {
 						originPath: '/', 
+						protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY, 
 					}),
 					allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
 					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -40,18 +41,5 @@ export class CloudFrontStack extends Construct {
 		new cdk.CfnOutput(this, 'DistributionUrl', {
 			value: `https://${this.distribution.distributionDomainName}`,
 		});
-
-		// new s3_deployment.BucketDeployment(this, 'WebsiteDeploy', {
-		// 	sources: [
-		// 	  s3_deployment.Source.data(
-		// 		'/index.html',
-		// 		'<html><body><h1>Hello, CDK!</h1></body></html>'
-		// 	  ),
-		// 	  s3_deployment.Source.data('/favicon.ico', ''),
-		// 	],
-		// 	destinationBucket: props.bucket,
-		// 	distribution: this.distribution,
-		// 	distributionPaths: ['/*'],
-		//   });
 	}
 }

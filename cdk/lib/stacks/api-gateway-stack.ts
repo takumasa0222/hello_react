@@ -37,7 +37,11 @@ export class ApiGatewayStack extends Construct {
 			API_GATEWAY.METHOD,
 			new apigw.LambdaIntegration(props.lambdaFunction, {
 			  proxy: true,
-			})
+			}),
+			{
+				apiKeyRequired: false,
+				authorizationType: apigw.AuthorizationType.NONE,
+			  }
 		);
 	}
 }
