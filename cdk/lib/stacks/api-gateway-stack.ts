@@ -27,9 +27,6 @@ export class ApiGatewayStack extends Construct {
 			methods: [apigwv2.HttpMethod.GET],
 			integration: new integrations.HttpLambdaIntegration('LambdaIntegration', props.lambdaFunction),
 		});
-		new cdk.CfnOutput(this, 'ApiUrl', {
-			value: `https://${this.httpApi.apiId}.execute-api.${cdk.Stack.of(this).region}.amazonaws.com${API_GATEWAY.PATH}`,
-			exportName: `ApiUrl-${props.stage}`,
-		  });
+
 	}
 }

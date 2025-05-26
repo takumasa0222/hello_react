@@ -6,6 +6,7 @@ import { LambdaStack } from './stacks/lambda-stack';
 import { ApiGatewayStack } from './stacks/api-gateway-stack'; 
 import { S3Stack } from './stacks/s3-stack';
 import { CloudFrontStack } from './stacks/cloudfront-stack'; 
+import { API_GATEWAY } from './constants/index'; 
 
 export class AppStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props: StageStackProps) {
@@ -15,10 +16,14 @@ export class AppStack extends cdk.Stack {
 			...props,
 			table: dynamo.table,
 		});
-		new ApiGatewayStack(this, `ApiGateway-${props.stage}`, {
+		const apigw= new ApiGatewayStack(this, `ApiGateway-${props.stage}`, {
 			...props,
 			lambdaFunction: lambda.fn
 		});
+		new cdk.CfnOutput(this, 'ApiUrl', {
+			value: `https://${apigw.httpApi.apiId}.execute-api.${cdk.Stack.of(this).region}.amazonaws.com${API_GATEWAY.PATH}`,
+			exportName: `ApiUrl-${props.stage}`,
+		  });
 		const s3 = new S3Stack(this, `S3-${props.stage}`, props);
 		 new CloudFrontStack(this, `cloudfront-${props.stage}`, {
 			...props,
