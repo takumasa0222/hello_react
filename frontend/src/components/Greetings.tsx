@@ -8,7 +8,8 @@ export default function Greetings() {
 	useEffect(() => {
 	const fetchData = async () => {
 		try {
-			const res = await axios.get(`${apiUrl}?lang=ja&type=default`);
+				console.log(apiUrl);
+				const res = await axios.get(`${apiUrl}?lang=ja&type=default`);
 			if (res.data?.message) {
 				setMessage(res.data.message);
 			} else {

@@ -55,11 +55,14 @@ jobs:
 
     - name: Clean frontend build
       working-directory: frontend
-      run: npm run clean
+      run: |
+        npm run clean
+        echo "REACT_APP_API_URL=" > .env.production
 
     - name: Build frontend (React)
       working-directory: frontend
       run: npm run build
+
 
     - name: Get S3 bucket name
       run: |
@@ -72,6 +75,11 @@ jobs:
     - name: Upload React build to S3
       run: |
         aws s3 sync frontend/build s3://$BUCKET_NAME --delete --region ap-northeast-1
+
+    - name: Debug .env.production
+      run: |
+        echo "===== .env.production ====="
+        cat frontend/.env.production || echo "not found"
 
     - name: Finish
       run: echo "Deployment complete for stage ${{ github.event.inputs.stage }}"
