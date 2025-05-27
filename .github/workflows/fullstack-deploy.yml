@@ -26,9 +26,9 @@ jobs:
 
     - name: Load constants from .env.deploy
       run: |
-        set -a
-        source .env.deploy
-        set +a
+        while IFS='=' read -r key value; do
+          echo "$key=$value" >> "$GITHUB_ENV"
+        done < .env.deploy
 
     - name: Install dependencies
       run: |
