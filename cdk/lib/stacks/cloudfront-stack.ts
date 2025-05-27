@@ -22,7 +22,6 @@ export class CloudFrontStack extends Construct {
 			comment: 'Policy for API Gateway origin',
 			cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
 			headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
-				'Authorization',
 				'CloudFront-Viewer-Country',
 				'CloudFront-Is-Mobile-Viewer',
 				'CloudFront-Is-Tablet-Viewer',
