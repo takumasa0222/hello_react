@@ -61,8 +61,8 @@ jobs:
      - name: Clean frontend build
       working-directory: frontend
       run: npm run clean
-      
-    - name: Build frontend (React)
+
+     - name: Build frontend (React)
       working-directory: frontend
       run: npm run build
 
