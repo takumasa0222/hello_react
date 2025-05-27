@@ -5,7 +5,7 @@ export default function Greetings() {
 	const [message, setMessage] = useState<string | null>(null);
 	// const [error, setError] = useState<any>(null);
 	const id = 0;
-	const apiUrl = '/api/message';
+	const apiUrl = '/message';
 
 	useEffect(() => {
 		if (id == null) return;

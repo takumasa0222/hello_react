@@ -17,19 +17,20 @@ export class CloudFrontStack extends Construct {
 	constructor (scope: Construct, id: string, props: CloudFrontStackProps) {
 		super(scope, id);
 
-		const apiOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'ApiOriginRequestPolicy', {
-			originRequestPolicyName: `api-origin-request-policy-${props.stage}`,
-			comment: 'Policy for API Gateway origin',
-			cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
-			headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
-				'CloudFront-Viewer-Country',
-				'CloudFront-Is-Mobile-Viewer',
-				'CloudFront-Is-Tablet-Viewer',
-				'CloudFront-Is-Desktop-Viewer'
-			),
-			queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-		});
-
+		// const apiOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'ApiOriginRequestPolicy', {
+		// 	originRequestPolicyName: `api-origin-request-policy-${props.stage}`,
+		// 	comment: 'Policy for API Gateway origin',
+		// 	cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
+		// 	headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
+		// 		'Authorization',
+		// 		'CloudFront-Viewer-Country',
+		// 		'CloudFront-Is-Mobile-Viewer',
+		// 		'CloudFront-Is-Tablet-Viewer',
+		// 		'CloudFront-Is-Desktop-Viewer'
+		// 	),
+		// 	queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
+		// });
+		
 		this.distribution = new cloudfront.Distribution(this, 'Distribution', {
 			comment: CLOUDFRONT.COMMENT,
 			defaultRootObject: CLOUDFRONT.DEFAULT_OBJ,
@@ -38,7 +39,7 @@ export class CloudFrontStack extends Construct {
 				viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 			},
 			additionalBehaviors: {
-				"api/*": {
+				"message*": {
 					origin: new origins.HttpOrigin(`${props.apiDomainName}`
 					, {
 						protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY, 
@@ -47,8 +48,7 @@ export class CloudFrontStack extends Construct {
 					allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
 					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 					cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-					// originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-					originRequestPolicy: apiOriginRequestPolicy,
+					originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
 				}
 			}
 		});

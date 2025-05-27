@@ -21,15 +21,6 @@ export class ApiGatewayStack extends Construct {
 		this.restApi = new apigw.RestApi(this, 'RestApi', {
 			restApiName: apiGatewayName,
 			description: API_GATEWAY.DESCRIPTION,
-			// deployOptions: {
-			// 	stageName: props.stage,
-			// 	accessLogDestination: new apigw.LogGroupLogDestination(
-			// 		new logs.LogGroup(this, 'ApiGatewayAccessLogs', {
-			// 			retention: logs.RetentionDays.ONE_WEEK,
-			// 		})
-			// 	),
-			// 	accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields(),
-			// },
 		});
 		const message = this.restApi.root.addResource(API_GATEWAY.PATH);
 		message.addCorsPreflight({
