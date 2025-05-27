@@ -1,7 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
-import { STATUS_CODES, ERROR_MESSAGES } from './constants';
+import { STATUS_CODES, ERROR_MESSAGES } from './constants.js';
 
 const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
