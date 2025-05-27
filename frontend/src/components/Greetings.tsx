@@ -3,7 +3,6 @@ import axios from 'axios';
 
 export default function Greetings() {
 	const [message, setMessage] = useState<string | null>(null);
-	// const [error, setError] = useState<any>(null);
 	const id = 0;
 	const apiUrl = '/message';
 
@@ -15,7 +14,6 @@ export default function Greetings() {
 			setMessage(res.data.message);
 		} catch (err) {
 			console.error(err);
-			// setError(err);
 		}
 	};
 
@@ -23,7 +21,6 @@ export default function Greetings() {
 	}, [apiUrl]);
 	return (
 	<div>
-		{/* {error && <p style={{ color: 'red' }}>Error: {error.message}</p>} */}
 		{message ? <h1>{message}</h1> : <p>Loading...</p>}
 	</div>
 	);
