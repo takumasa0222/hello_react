@@ -24,45 +24,44 @@ jobs:
       with:
         node-version: '22'
 
+    - name: Load constants from .env.deploy
+      run: |
+        set -a
+        source .env.deploy
+        set +a
+
     - name: Install dependencies
       run: |
-        cd cdk && npm ci
-        cd ../frontend && npm ci
-        cd ../backend && npm ci
+        cd $CDK_DIR && npm ci
+        cd ../$FRONTEND_DIR && npm ci
+        cd ../$BACKEND_DIR && npm ci
 
     - name: Build backend
-      run: cd backend && npm run build
+      run: cd $BACKEND_DIR && npm run build
 
     - name: Assume Role with OIDC
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: arn:aws:iam::631283698624:role/github-oidc-react-role
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.CDK_ROLE_NAME }}
         role-session-name: GitHubActions
-        aws-region: ap-northeast-1
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Bootstrap CDK environment
       run: |
-        cd cdk
-        npx cdk bootstrap aws://631283698624/ap-northeast-1 --context stage=${{ github.event.inputs.stage }}
+        cd $CDK_DIR
+        npx cdk bootstrap aws://$AWS_ACCOUNT_ID/$AWS_REGION --context stage=${{ github.event.inputs.stage }}
 
     - name: Deploy infrastructure via CDK
       run: |
-        cd cdk
+        cd $CDK_DIR
         npx cdk deploy --all --require-approval never --context stage=${{ github.event.inputs.stage }} --outputs-file ../cdk-outputs.json
 
-    - name: Reset .env.production
-      run: echo "REACT_APP_API_URL=" > frontend/.env.production
-
     - name: Clean frontend build
-      working-directory: frontend
+      working-directory: ${{ env.FRONTEND_DIR }}
       run: |
-        npm run clean
         echo "REACT_APP_API_URL=" > .env.production
-
-    - name: Build frontend (React)
-      working-directory: frontend
-      run: npm run build
-
+        rm -rf build
+        npm run build
 
     - name: Get S3 bucket name
       run: |
@@ -74,12 +73,7 @@ jobs:
 
     - name: Upload React build to S3
       run: |
-        aws s3 sync frontend/build s3://$BUCKET_NAME --delete --region ap-northeast-1
-
-    - name: Debug .env.production
-      run: |
-        echo "===== .env.production ====="
-        cat frontend/.env.production || echo "not found"
+        aws s3 sync $FRONTEND_DIR/build s3://$BUCKET_NAME --delete --region $AWS_REGION
 
     - name: Finish
       run: echo "Deployment complete for stage ${{ github.event.inputs.stage }}"
