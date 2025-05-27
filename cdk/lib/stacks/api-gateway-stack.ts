@@ -4,7 +4,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { StageStackProps } from "../types/stack-props";
 import { API_GATEWAY } from "../constants/api-gateway.constants";
 import { createResourceName } from "../utils/naming";
-import * as logs from 'aws-cdk-lib/aws-logs';
+// import * as logs from 'aws-cdk-lib/aws-logs';
 import * as cdk from 'aws-cdk-lib';
 
 interface ApiGatwayStackProps extends StageStackProps {
@@ -21,15 +21,15 @@ export class ApiGatewayStack extends Construct {
 		this.restApi = new apigw.RestApi(this, 'RestApi', {
 			restApiName: apiGatewayName,
 			description: API_GATEWAY.DESCRIPTION,
-			deployOptions: {
-				stageName: props.stage,
-				accessLogDestination: new apigw.LogGroupLogDestination(
-					new logs.LogGroup(this, 'ApiGatewayAccessLogs', {
-						retention: logs.RetentionDays.ONE_WEEK,
-					})
-				),
-				accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields(),
-			},
+			// deployOptions: {
+			// 	stageName: props.stage,
+			// 	accessLogDestination: new apigw.LogGroupLogDestination(
+			// 		new logs.LogGroup(this, 'ApiGatewayAccessLogs', {
+			// 			retention: logs.RetentionDays.ONE_WEEK,
+			// 		})
+			// 	),
+			// 	accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields(),
+			// },
 		});
 		const message = this.restApi.root.addResource(API_GATEWAY.PATH);
 		message.addCorsPreflight({
