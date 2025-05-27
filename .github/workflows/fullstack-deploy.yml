@@ -32,7 +32,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        echo $CDK_DIR
         cd $CDK_DIR && npm ci
         cd ../$FRONTEND_DIR && npm ci
         cd ../$BACKEND_DIR && npm ci

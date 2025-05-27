@@ -22,7 +22,7 @@ export default function Greetings() {
 			}
 		};
 		fetchData();
-	}, [apiUrl]);
+	}, [apiUrl, queryParams]);
 
 	return (
 		<div>
