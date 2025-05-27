@@ -3,20 +3,21 @@ import axios from 'axios';
 
 export default function Greetings() {
 	const [message, setMessage] = useState<string | null>(null);
-	const id = 0;
 	const apiUrl = '/message';
 
 	useEffect(() => {
-		if (id == null) return;
 	const fetchData = async () => {
 		try {
 			const res = await axios.get(`${apiUrl}?lang=ja&type=default`);
-			setMessage(res.data.message);
+			if (res.data?.message) {
+				setMessage(res.data.message);
+			} else {
+				console.warn("message field not found in response:", res.data);
+			}
 		} catch (err) {
 			console.error(err);
 		}
 	};
-
 	fetchData();
 	}, [apiUrl]);
 	return (

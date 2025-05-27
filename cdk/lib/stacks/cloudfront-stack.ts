@@ -16,20 +16,6 @@ export class CloudFrontStack extends Construct {
 
 	constructor (scope: Construct, id: string, props: CloudFrontStackProps) {
 		super(scope, id);
-
-		// const apiOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'ApiOriginRequestPolicy', {
-		// 	originRequestPolicyName: `api-origin-request-policy-${props.stage}`,
-		// 	comment: 'Policy for API Gateway origin',
-		// 	cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
-		// 	headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
-		// 		'Authorization',
-		// 		'CloudFront-Viewer-Country',
-		// 		'CloudFront-Is-Mobile-Viewer',
-		// 		'CloudFront-Is-Tablet-Viewer',
-		// 		'CloudFront-Is-Desktop-Viewer'
-		// 	),
-		// 	queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-		// });
 		
 		this.distribution = new cloudfront.Distribution(this, 'Distribution', {
 			comment: CLOUDFRONT.COMMENT,
