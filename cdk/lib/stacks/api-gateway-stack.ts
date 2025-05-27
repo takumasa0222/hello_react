@@ -29,7 +29,7 @@ export class ApiGatewayStack extends Construct {
 					})
 				),
 				accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields(),
-
+			},
 		});
 		const message = this.restApi.root.addResource(API_GATEWAY.PATH);
 		message.addCorsPreflight({
