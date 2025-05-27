@@ -28,13 +28,7 @@
 
 ## ディレクトリ構成
 
-hello_react/
-├── backend/ # Lambda 関数のソースコード
-├── frontend/ # React アプリケーション
-├── cdk/ # AWS CDK スタック定義
-├── .github/workflows/ # GitHub Actions 定義
-├── .env.deploy # CI で読み込む定数ファイル
-└── cdk-outputs.json # CDK 実行時の出力ファイル
+<pre> ```text hello_react/ ├── backend/ # Lambda 関数のソースコード ├── frontend/ # React アプリケーション ├── cdk/ # AWS CDK スタック定義 ├── .github/workflows/ # GitHub Actions 定義 ├── .env.deploy # CI で読み込む定数ファイル └── cdk-outputs.json # CDK 実行時の出力ファイル ``` </pre>
 
 ---
 
