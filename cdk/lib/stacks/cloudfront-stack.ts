@@ -26,9 +26,10 @@ export class CloudFrontStack extends Construct {
 			},
 			additionalBehaviors: {
 				"api/*": {
-					origin: new origins.HttpOrigin(`${props.apiDomainName}/${props.stage}`
+					origin: new origins.HttpOrigin(`${props.apiDomainName}`
 					, {
 						protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY, 
+						originPath: `/${props.stage}`,
 					}),
 					allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
 					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
