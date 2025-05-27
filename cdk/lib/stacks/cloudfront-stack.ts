@@ -42,8 +42,5 @@ export class CloudFrontStack extends Construct {
 		new cdk.CfnOutput(this, 'DistributionUrl', {
 			value: `https://${this.distribution.distributionDomainName}`,
 		});
-		new cdk.CfnOutput(this, 'apigatewayURLForCloudFront', {
-			value: `${props.apiDomainName}/${props.stage}`,
-		});
 	}
 }

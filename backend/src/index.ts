@@ -1,6 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { STATUS_CODES, ERROR_MESSAGES } from './constants';
 
 const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
@@ -13,11 +14,11 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 	
 	if (!lang || !type) {
 		return {
-		statusCode: 400,
-		headers: { 'Access-Control-Allow-Origin': '*' },
-		body: JSON.stringify({ error: 'Missing lang or type query parameter' }),
+		  statusCode: STATUS_CODES.BAD_REQUEST,
+		  headers: { 'Access-Control-Allow-Origin': '*' },
+		  body: JSON.stringify({ error: ERROR_MESSAGES.MISSING_QUERY }),
 		};
-	}
+	  }
 	try {
 		const result = await client.send(
 			new GetCommand({
@@ -30,22 +31,23 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 		);
 		if (!result.Item) {
 			return {
-				statusCode: 404,
-				headers: { 'Access-Control-Allow-Origin': '*' },
-				body: JSON.stringify({ error: 'Item not found' }),
+			  statusCode: STATUS_CODES.NOT_FOUND,
+			  headers: { 'Access-Control-Allow-Origin': '*' },
+			  body: JSON.stringify({ error: ERROR_MESSAGES.ITEM_NOT_FOUND }),
 			};
-		}
+		  }
+	  
 		return {
-			statusCode: 200,
+			statusCode: STATUS_CODES.OK,
 			headers: { 'Access-Control-Allow-Origin': '*' },
 			body: JSON.stringify(result.Item),
 		};
 	} catch (error) {
 		console.error('DynamoDB error:', error);
 		return {
-		statusCode: 500,
-		headers: { 'Access-Control-Allow-Origin': '*' },
-		body: JSON.stringify({ error: 'Internal server error' }),
+		  statusCode: STATUS_CODES.INTERNAL_ERROR,
+		  headers: { 'Access-Control-Allow-Origin': '*' },
+		  body: JSON.stringify({ error: ERROR_MESSAGES.SERVER_ERROR }),
 		};
 	}
 };
